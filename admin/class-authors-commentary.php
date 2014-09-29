@@ -4,7 +4,7 @@
  * The dashboard-specific functionality of the plugin.
  *
  * @link       http://tutsplus.com/tutorials/creating-maintainable-wordpress-meta-boxes--cms-22189
- * @since      1.0.0
+ * @since      0.1.0
  *
  * @package    Author_Commentary
  * @subpackage Author_Commentary/admin
@@ -41,6 +41,15 @@ class Author_Commentary_Admin {
 	private $version;
 
 	/**
+	 * A reference to the meta box.
+	 *
+	 * @since    0.2.0
+	 * @access   private
+	 * @var      Authors_Commentary_Meta_Box    $meta_box    A reference to the meta box for the plugin.
+	 */
+	private $meta_box;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    0.1.0
@@ -51,6 +60,26 @@ class Author_Commentary_Admin {
 
 		$this->name = $name;
 		$this->version = $version;
+
+		$this->meta_box = new Authors_Commentary_Meta_Box();
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+
+	}
+
+	/**
+	 * Enqueues all files specifically for the dashboard.
+	 *
+	 * @since    0.2.0
+	 */
+	public function enqueue_admin_styles() {
+
+		wp_enqueue_style(
+			$this->name . '-admin',
+			plugins_url( 'authors-commentary/admin/assets/css/admin.css' ),
+			false,
+			$this->version
+		);
 
 	}
 
