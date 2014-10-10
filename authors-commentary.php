@@ -7,7 +7,7 @@
  * class file.
  *
  * @link              http://tutsplus.com/tutorials/creating-maintainable-wordpress-meta-boxes--cms-22189
- * @since             0.1.0
+ * @since             0.3.0
  * @package           Author_Commentary
  *
  * @wordpress-plugin
@@ -49,6 +49,6 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-authors-commentary.php';
  * @since    0.1.0
  */
 function run_author_commentary() {
-	$author_commentary = new Author_Commentary_Admin( 'acme-plugin-name', '0.1.0' );
+	$author_commentary = new Author_Commentary_Admin( 'acme-plugin-name', '0.3.0' );
 }
 run_author_commentary();
