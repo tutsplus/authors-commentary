@@ -58,4 +58,23 @@ class Authors_Commentary_Meta_Box {
 		include_once( 'views/authors-commentary-navigation.php' );
 	}
 
+	/**
+	 * Loads all of the comments for the given post along with checkboxes used to
+	 * indicate whether or not they've received a reply or not.
+	 *
+	 * @since    0.4.0
+	 * @access   private
+	 */
+	private function load_post_comments() {
+
+		$args = array(
+			'post_id' => get_the_ID(),
+			'status'  => 'approve'
+		);
+		$comments = get_comments( $args );
+
+		return $comments;
+
+	}
+
 }

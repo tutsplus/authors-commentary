@@ -12,5 +12,6 @@
 ?>
 
 <div class="inside hidden">
-	<p>This is where the Resources content will reside.</p>
+	<div id="authors-commentary-resources"></div><!-- #authors-commentary-resources -->
+	<p><input type="submit" id="authors-commentary-add-resource" value="Add Resource" class="button" />
 </div>

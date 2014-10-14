@@ -77,7 +77,7 @@ class Author_Commentary_Admin {
 
 		wp_enqueue_style(
 			$this->name . '-admin',
-			plugins_url( 'authors-commentary/admin/assets/css/admin.css' ),
+			plugin_dir_url( __FILE__ ) . '/assets/css/admin.css',
 			false,
 			$this->version
 		);
@@ -96,7 +96,14 @@ class Author_Commentary_Admin {
 
 			wp_enqueue_script(
 				$this->name . '-tabs',
-				plugins_url( 'authors-commentary/admin/assets/js/tabs.js' ),
+				plugin_dir_url( __FILE__ ) . 'authors-commentary/admin/assets/js/tabs.js',
+				array( 'jquery' ),
+				$this->version
+			);
+
+			wp_enqueue_script(
+				$this->name . '-resources',
+				plugin_dir_url( __FILE__ ) . 'authors-commentary/admin/assets/js/resources.js',
 				array( 'jquery' ),
 				$this->version
 			);
