@@ -16,7 +16,7 @@
 	<ul id="author-commentary-comments">
 		<?php foreach ( $comments as $comment ) { ?>
 			<li>
-				<label for="authors-commentary-comments[<?php echo $comment->comment_ID ?>]">
+				<label for="authors-commentary-comment-<?php echo $comment->comment_ID ?>">
 					<input type="checkbox" name="authors-commentary-comments[<?php echo $comment->comment_ID ?>]" id="authors-commentary-comment-<?php echo $comment->comment_ID ?>" />
 					This comment has received a reply.
 				</label>
