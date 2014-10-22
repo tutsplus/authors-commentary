@@ -49,6 +49,6 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-authors-commentary.php';
  * @since    0.1.0
  */
 function run_author_commentary() {
-	$author_commentary = new Author_Commentary_Admin( 'author-commentary', '0.4.0' );
+	$author_commentary = new Author_Commentary_Admin( 'author-commentary', '0.5.0' );
 }
 run_author_commentary();
