@@ -20,7 +20,7 @@ function createInputElement( $ ) {
 	$inputElement =
 		$( '<input />' )
 			.attr( 'type', 'text' )
-			.attr( 'name', 'authors-commentary-resources[' + iInputCount + ']' )
+			.attr( 'name', 'authors-commentary-resource-' + iInputCount )
 			.attr( 'id', 'authors-commentary-resource-' + iInputCount )
 			.attr( 'value', '' );
 
