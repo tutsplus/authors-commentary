@@ -18,7 +18,7 @@
 			<li>
 				<label for="authors-commentary-comment-<?php echo $comment->comment_ID ?>">
 					<?php $comments = get_post_meta( get_the_ID(), 'authors-commentary-comments', true ); ?>
-					<input type="checkbox" name="authors-commentary-comments[<?php echo $comment->comment_ID ?>]" id="authors-commentary-comment-<?php echo $comment->comment_ID ?>" <?php echo array_key_exists( $comment->comment_ID, $comments ) ? 'checked="checked"' : ''; ?>" />
+					<input type="checkbox" name="authors-commentary-comments[<?php echo $comment->comment_ID ?>]" id="authors-commentary-comment-<?php echo $comment->comment_ID ?>" <?php echo array_key_exists( $comment->comment_ID, $comments ) ? 'checked="checked"' : ''; ?> />
 					This comment has received a reply.
 				</label>
 				<p>
