@@ -103,7 +103,13 @@ class Authors_Commentary_Meta_Box {
 			$drafts = trim( $_POST['authors-commentary-drafts'] );
 			$drafts = esc_textarea( strip_tags( $drafts ) );
 
-			// More to come...
+			update_post_meta( $post_id, 'authors-commentary-drafts', $drafts );
+
+		} else {
+
+			if ( '' !== get_post_meta( $post_id, 'authors-commentary-drafts', true ) ) {
+				delete_post_meta( $post_id, 'authors-commentary-drafts' );
+			}
 
 		}
 
@@ -111,25 +117,44 @@ class Authors_Commentary_Meta_Box {
 		if ( ! empty( $_POST['authors-commentary-resources'] ) ) {
 
 			$resources = $_POST['authors-commentary-resources'];
+			$sanitized_resources = array();
 			foreach ( $resources as $resource ) {
 
 				$resource = esc_url( strip_tags( $resource ) );
+				if ( ! empty( $resource ) ) {
+					$sanitized_resources[] = $resource;
+				}
 
-				// More to come...
+			}
 
+			update_post_meta( $post_id, 'authors-commentary-resources', $sanitized_resources );
+
+		} else {
+
+			if ( '' !== get_post_meta( $post_id, 'authors-commentary-resources', true ) ) {
+				delete_post_meta( $post_id, 'authors-commentary-resources' );
 			}
 
 		}
 
-		// If there are any values saved in the 'Resources' input, save them
+		// If there are any values saved in the 'Published' input, save them
 		if ( ! empty( $_POST['authors-commentary-comments'] ) ) {
 
 			$comments = $_POST['authors-commentary-comments'];
-			foreach ( $comments as $comment ) {
+			$sanitized_comments = array();
+			foreach ( $comments as $comment_id => $comment_value  ) {
 
-				$comment = strip_tags( stripslashes( $comment ) );
-				// More to come...
+				$comment = strip_tags( stripslashes( $comment_value ) );
+				$sanitized_comments[ $comment_id ] = $comment;
 
+			}
+
+			update_post_meta( $post_id, 'authors-commentary-comments', $sanitized_comments );
+
+		} else {
+
+			if ( '' !== get_post_meta( $post_id, 'authors-commentary-comments', true ) ) {
+				delete_post_meta( $post_id, 'authors-commentary-comments' );
 			}
 
 		}
