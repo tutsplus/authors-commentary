@@ -25,9 +25,9 @@ class Authors_Commentary_Meta_Box {
 	/**
 	 * Register this class with the WordPress API
 	 *
-	 * @since    0.2.0
+	 * @since    1.0.0
 	 */
-	public function __construct() {
+	public function initialize_hooks() {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
@@ -92,79 +92,144 @@ class Authors_Commentary_Meta_Box {
 		/* If we're not working with a 'post' post type or the user doesn't have permission to save,
 		 * then we exit the function.
 		 */
-		if ( ! $this->is_valid_post_type() || ! $this->user_can_save( $post_id, 'authors_commentary_nonce', 'authors_commentary_save' ) ) {
+		if ( ! $this->user_can_save( $post_id, 'authors_commentary_nonce', 'authors_commentary_save' ) ) {
 			return;
 		}
 
 		// If the 'Drafts' textarea has been populated, then we sanitize the information.
-		if ( ! empty( $_POST['authors-commentary-drafts'] ) ) {
+		if ( $this->value_exists( 'authors-commentary-drafts' ) ) {
 
-			// We'll remove all white space, HTML tags, and encode the information to be saved
-			$drafts = trim( $_POST['authors-commentary-drafts'] );
-			$drafts = esc_textarea( strip_tags( $drafts ) );
-
-			update_post_meta( $post_id, 'authors-commentary-drafts', $drafts );
+			$this->update_post_meta(
+				$post_id,
+				'authors-commentary-drafts',
+				$this->sanitize_data( 'authors-commentary-drafts' )
+			);
 
 		} else {
-
-			if ( '' !== get_post_meta( $post_id, 'authors-commentary-drafts', true ) ) {
-				delete_post_meta( $post_id, 'authors-commentary-drafts' );
-			}
-
+			$this->delete_post_meta( $post_id, 'authors-commentary-drafts' );
 		}
 
 		// If the 'Resources' inputs exist, iterate through them and sanitize them
-		if ( ! empty( $_POST['authors-commentary-resources'] ) ) {
+		if ( $this->value_exists( 'authors-commentary-resources' ) ) {
 
-			$resources = $_POST['authors-commentary-resources'];
-			$sanitized_resources = array();
+			$this->update_post_meta(
+				$post_id,
+				'authors-commentary-resources',
+				$this->sanitize_data( 'authors-commentary-resources', true )
+			);
+
+		} else {
+			$this->delete_post_meta( $post_id, 'authors-commentary-resources' );
+		}
+
+		// If there are any values saved in the 'Published' input, save them
+		if ( $this->value_exists( 'authors-commentary-comments' ) ) {
+
+			$this->update_post_meta(
+				$post_id,
+				'authors-commentary-comments',
+				$_POST['authors-commentary-comments']
+			);
+
+		} else {
+			$this->delete_post_meta( $post_id, 'authors-commentary-comments' );
+		}
+
+	}
+
+	/**
+	 * Determines whether or not a value exists in the $_POST collection
+	 * identified by the specified key.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @param   string    $key    The key of the value in the $_POST collection.
+	 * @return  bool              True if the value exists; otherwise, false.
+	 */
+	private function value_exists( $key ) {
+		return ! empty( $_POST[ $key ] );
+	}
+
+	/**
+	 * Deletes the specified meta data associated with the specified post ID
+	 * based on the incoming key.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @param    int      $post_id    The ID of the post containing the meta data
+	 * @param    string   $meta_key   The ID of the meta data value
+	 */
+	private function delete_post_meta( $post_id, $meta_key ) {
+
+		if ( '' !== get_post_meta( $post_id, $meta_key, true ) ) {
+			delete_post_meta( $post_id, '$meta_key' );
+		}
+
+	}
+
+	/**
+	 * Updates the specified meta data associated with the specified post ID
+	 * based on the incoming key.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @param    int      $post_id    The ID of the post containing the meta data
+	 * @param    string   $meta_key   The ID of the meta data value
+	 * @param    mixed    $meta_value The sanitized meta data
+	 */
+	private function update_post_meta( $post_id, $meta_key, $meta_value ) {
+
+		if ( is_array( $_POST[ $meta_key ] ) ) {
+			$meta_value = array_filter( $_POST[ $meta_key ] );
+		}
+
+		update_post_meta( $post_id, $meta_key, $meta_value );
+
+	}
+
+	/**
+	 * Sanitizes the data in the $_POST collection identified by the specified key
+	 * based on whether or not the data is text or is an array.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @param    string        $key                      The key used to retrieve the data from the $_POST collection.
+	 * @param    bool          $is_array    Optional.    True if the incoming data is an array.
+	 * @return   array|string                            The sanitized data.
+	 */
+	private function sanitize_data( $key, $is_array = false ) {
+
+		$sanitized_data = null;
+
+		if ( $is_array ) {
+
+			$resources = $_POST[ $key ];
+			$sanitized_data = array();
+
 			foreach ( $resources as $resource ) {
 
 				$resource = esc_url( strip_tags( $resource ) );
 				if ( ! empty( $resource ) ) {
-					$sanitized_resources[] = $resource;
+					$sanitized_data[] = $resource;
 				}
 
 			}
 
-			update_post_meta( $post_id, 'authors-commentary-resources', $sanitized_resources );
-
 		} else {
 
-			if ( '' !== get_post_meta( $post_id, 'authors-commentary-resources', true ) ) {
-				delete_post_meta( $post_id, 'authors-commentary-resources' );
-			}
+			$sanitized_data = '';
+			$sanitized_data = trim( $_POST[ $key ] );
+			$sanitized_data = esc_textarea( strip_tags( $sanitized_data ) );
 
 		}
 
-		// If there are any values saved in the 'Published' input, save them
-		if ( ! empty( $_POST['authors-commentary-comments'] ) ) {
-
-			$comments = $_POST['authors-commentary-comments'];
-			$sanitized_comments = array();
-			foreach ( $comments as $comment_id => $comment_value  ) {
-
-				$comment = strip_tags( stripslashes( $comment_value ) );
-				$sanitized_comments[ $comment_id ] = $comment;
-
-			}
-
-			update_post_meta( $post_id, 'authors-commentary-comments', $sanitized_comments );
-
-		} else {
-
-			if ( '' !== get_post_meta( $post_id, 'authors-commentary-comments', true ) ) {
-				delete_post_meta( $post_id, 'authors-commentary-comments' );
-			}
-
-		}
+		return $sanitized_data;
 
 	}
 
 	/**
 	 * Verifies that the post type that's being saved is actually a post (versus a page or another
 	 * custom post type.
-	 *
 	 *
 	 * @since       0.5.0
 	 * @access      private
@@ -191,7 +256,7 @@ class Authors_Commentary_Meta_Box {
 	    $is_valid_nonce = ( isset( $_POST[ $nonce_action ] ) && wp_verify_nonce( $_POST[ $nonce_action ], $nonce_id ) );
 
 	    // Return true if the user is able to save; otherwise, false.
-	    return ! ( $is_autosave || $is_revision ) && $is_valid_nonce;
+	    return ! ( $is_autosave || $is_revision ) && $this->is_valid_post_type() && $is_valid_nonce;
 
 	}
 

@@ -14,7 +14,7 @@
  * Plugin Name:       Author Commentary
  * Plugin URI:        http://tutsplus.com/tutorials/creating-maintainable-wordpress-meta-boxes--cms-22189
  * Description:       Allows authors to keep notes and track information and resources when drafting posts.
- * Version:           0.6.0
+ * Version:           1.0.0
  * Author:            Tom McFarlin
  * Author URI:        http://tommcfarlin.com
  * License:           GPL-2.0+
@@ -49,6 +49,9 @@ require_once plugin_dir_path( __FILE__ ) . 'admin/class-authors-commentary.php';
  * @since    0.1.0
  */
 function run_author_commentary() {
-	$author_commentary = new Author_Commentary_Admin( 'author-commentary', '0.6.0' );
+
+	$author_commentary = new Author_Commentary_Admin( 'author-commentary', '1.0.0' );
+	$author_commentary->initialize_hooks();
+
 }
 run_author_commentary();

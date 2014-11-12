@@ -63,6 +63,17 @@ class Author_Commentary_Admin {
 
 		$this->meta_box = new Authors_Commentary_Meta_Box();
 
+	}
+
+	/**
+	 * Registers the hooks and their associated callback functions with WordPress.
+	 *
+	 * @since    1.0.0
+	 */
+	public function initialize_hooks() {
+
+		$this->meta_box->initialize_hooks();
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
