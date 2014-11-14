@@ -162,7 +162,7 @@ class Authors_Commentary_Meta_Box {
 	private function delete_post_meta( $post_id, $meta_key ) {
 
 		if ( '' !== get_post_meta( $post_id, $meta_key, true ) ) {
-			delete_post_meta( $post_id, '$meta_key' );
+			delete_post_meta( $post_id, $meta_key );
 		}
 
 	}

@@ -14,8 +14,10 @@
 <div class="inside hidden">
 	<div id="authors-commentary-resources">
 		<?php $resources = get_post_meta( get_the_ID(), 'authors-commentary-resources', true ); ?>
-		<?php foreach ( $resources as $resource ) { ?>
-			<input type="text" name="authors-commentary-resources[]" value="<?php echo $resource; ?>" />
+		<?php if ( ! empty( $resources ) ) { ?>
+			<?php foreach ( $resources as $resource ) { ?>
+				<input type="text" name="authors-commentary-resources[]" value="<?php echo $resource; ?>" />
+			<?php } ?>
 		<?php } ?>
 	</div><!-- #authors-commentary-resources -->
 	<p><input type="submit" id="authors-commentary-add-resource" value="Add Resource" class="button" />
