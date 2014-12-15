@@ -24,7 +24,7 @@
 				if ( ! $( this ).hasClass( 'nav-tab-active' ) ) {
 
 					// Unmark the current tab and mark the new one as active
-					$$( this ).siblings( '.nav-tab-active' ).removeClass( 'nav-tab-active' );
+					$( this ).siblings( '.nav-tab-active' ).removeClass( 'nav-tab-active' );
 					$( this ).addClass( 'nav-tab-active' );
 
 					// Save the index of the tab that's just been marked as active. It will be 0 - 3.
